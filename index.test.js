@@ -1,63 +1,39 @@
-const translate = require('./index')
+const isLeap = require('./index')
 
-describe('ProteinTranslation', () => {
-  test('Empty RNA has no proteins', () => {
-    expect(translate()).toEqual([]);
+describe('A leap year', () => {
+  test('year not divisible by 4 in common year', () => {
+    expect(isLeap(2015)).toBe(false);
   });
 
-  test('Methionine codon translates into protein', () => {
-    expect(translate('AUG')).toEqual(['Methionine']);
+  test('year divisible by 2, not divisible by 4 in common year', () => {
+    expect(isLeap(1970)).toBe(false);
   });
 
-  test('Phenylalanine codons translate into protein', () => {
-    expect(translate('UUUUUC')).toEqual(['Phenylalanine', 'Phenylalanine']);
+  test('year divisible by 4, not divisible by 100 in leap year', () => {
+    expect(isLeap(1996)).toBe(true);
   });
 
-  test('Leucine codons translate into protein', () => {
-    expect(translate('UUAUUG')).toEqual(['Leucine', 'Leucine']);
+  test('year divisible by 4 and 5 is still a leap year', () => {
+    expect(isLeap(1960)).toBe(true);
   });
 
-  test('Serine codons translate into protein', () => {
-    expect(translate('UCUUCCUCAUCG')).toEqual(['Serine', 'Serine', 'Serine', 'Serine']);
+  test('year divisible by 100, not divisible by 400 in common year', () => {
+    expect(isLeap(2100)).toBe(false);
   });
 
-  test('Tyrosine codons translate into protein', () => {
-    expect(translate('UAUUAC')).toEqual(['Tyrosine', 'Tyrosine']);
+  test('year divisible by 100 but not by 3 is still not a leap year', () => {
+    expect(isLeap(1900)).toBe(false);
   });
 
-  test('Cysteine codons translate into protein', () => {
-    expect(translate('UGUUGC')).toEqual(['Cysteine', 'Cysteine']);
+  test('year divisible by 400 in leap year', () => {
+    expect(isLeap(2000)).toBe(true);
   });
 
-  test('Tryptophan codon translates into protein', () => {
-    expect(translate('UGG')).toEqual(['Tryptophan']);
+  test('year divisible by 400 but not by 125 is still a leap year', () => {
+    expect(isLeap(2400)).toBe(true);
   });
 
-  test('Sequence starts with stop codon 1', () => {
-    expect(translate('UAAUUUUUA')).toEqual([]);
-  });
-
-  test('Sequence starts with stop codon 2', () => {
-    expect(translate('UAGAUGUAU')).toEqual([]);
-  });
-
-  test('Sequence starts with stop codon 3', () => {
-    expect(translate('UGAUGU')).toEqual([]);
-  });
-
-  test('Small RNA strand', () => {
-    expect(translate('AUGUUUUCU')).toEqual(['Methionine', 'Phenylalanine', 'Serine']);
-  });
-
-  test('Stop codon ends translation', () => {
-    expect(translate('AUGUUUUCUUAAAUG')).toEqual(['Methionine', 'Phenylalanine', 'Serine']);
-  });
-
-  test('Invalid codon throws error', () => {
-    expect(() => translate('LOL')).toThrow(new Error('Invalid codon'));
-  });
-
-  test('Invalid codon throws error', () => {
-    expect(() => translate('AUGOO')).toThrow(new Error('Invalid codon'));
+  test('year divisible by 200, not divisible by 400 in common year', () => {
+    expect(isLeap(1800)).toBe(false);
   });
 });
